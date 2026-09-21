@@ -1,6 +1,18 @@
-from flask import Flask
+{
+  "title": "Flooded clinic",
+  "description": "Water has entered the ground floor.",
+  "category": "flood",
+  "severity": "high",
+  "latitude": 40.7128,
+  "longitude": -74.006,
+  "people_affected": 18
+}from flask import Flask, jsonify
 from app.config.config import get_config_by_name
 from app.initialize_functions import initialize_route, initialize_db, initialize_swagger
+from app.modules.main.controller import MainController
+
+
+main_controller = MainController()
 
 def create_app(config=None) -> Flask:
     """
@@ -24,5 +36,9 @@ def create_app(config=None) -> Flask:
 
     # Initialize Swagger
     initialize_swagger(app)
+
+    @app.route("/", methods=["GET"])
+    def index():
+        return jsonify(main_controller.index())
 
     return app
